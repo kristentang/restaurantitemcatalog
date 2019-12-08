@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <link rel=stylesheet type=text/css href="{{url_for('static', filename='mystyle.css')}}">
+    <meta charset = "UTF-8">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma:light|Lovers+Quarrel|Roboto:thin|Open+Sans+Condensed:300|Open+Sans:300|Lora">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body>
+    {% if username %}
+      <div class="text-right">
+        <img src="{{picture}}" class="username-image">{{username}}
+        <br><br>
+        <a class="button" href="{{url_for('gdisconnect')}}">Sign Out</a>
+      </div>
+    {% else %}
+      <div class="text-right">
+        <br>
+        <a class="button" href="{{url_for('showLogin')}}">Log In</a>
+      </div>
+    {% endif %}
+    <!-- FLASH -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+        {% for message in messages %}
+          <p><strong> {{ message }} </strong></p>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+    <!-- / FLASH -->
+    <h1>All Restaurants</h1>
+    {% if user_id %}
+      <a href='{{url_for('newRestaurant')}}' class='button'>Create New Restaurant</a>
+    {% endif %}
+    <br><br>
+      {% for restaurant in restaurants %}
+      <center>
+        <div class="card">
+          <h2>{{restaurant.name}}</h2>
+          <a class='button' href='{{url_for('restaurantMenu', restaurant_id = restaurant.id)}}'>View Menu</a>
+          {% if restaurant.user_id == user_id %}
+          <br>
+          <a class='button' href='{{url_for('deleteRestaurant', restaurant_id = restaurant.id)}}'>Delete</a>
+          <a class='button' href='{{url_for('editRestaurant', restaurant_id = restaurant.id)}}'>Edit</a>
+          {% endif %}
+          <br><br>
+        </div>
+      </center>
+    {% endfor %}
+  </body>
+</html>
