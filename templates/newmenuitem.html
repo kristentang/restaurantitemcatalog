@@ -1,0 +1,42 @@
+<html>
+<head>
+  <link rel=stylesheet type=text/css href="{{url_for('static', filename='mystyle.css')}}">
+  <meta charset = "UTF-8">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma:light|Lovers+Quarrel|Roboto:thin|Open+Sans+Condensed:300|Open+Sans:300|Lora">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+  <body>
+    {% if username %}
+      <div class="text-right">
+        <img src="{{picture}}" class="username-image">{{username}}
+        <br><br>
+        <a class="button" href="{{url_for('gdisconnect')}}">Sign Out</a>
+      </div>
+    {% else %}
+      <div class="text-right">
+        <br>
+        <a class="button" href="{{url_for('showLogin')}}">Log In</a>
+      </div>
+    {% endif %}
+    <h1>New Menu Item</h1>
+    <form action="{{ url_for('newMenuItem', restaurant_id=restaurant_id)}}" method = 'post'>
+      <div class="leftalign">
+        Name: <input type='text' size='30' name='name'>
+        <br><br>
+        Description: <input type='text' size='90' name='description'>
+        <br><br>
+        Price: <input type='text' size='30' name='price'>
+        <!-- <br><br>
+        Course:
+        <br>
+        <input type='radio' name='course' value='appetizer'> Appetizer<br>
+        <input type='radio' name='course' value='entree'> Entree<br>
+        <input type='radio' name='course' value='dessert'> Dessert<br>
+        <input type='radio' name='course' value='beverage'> Beverage<br> -->
+        <br><br>
+        <a class='button' href="{{url_for('restaurantMenu', restaurant_id=restaurant_id)}}">Cancel</a>
+        <input class='button' type='submit' value='Create'>
+      </div>
+    </form>
+  </body>
+</html>

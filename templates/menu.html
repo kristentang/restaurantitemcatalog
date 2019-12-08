@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <link rel=stylesheet type=text/css href="{{url_for('static', filename='mystyle.css')}}">
+    <meta charset = "UTF-8">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma:light|Lovers+Quarrel|Roboto:thin|Open+Sans+Condensed:300|Open+Sans:300|Lora">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  </head>
+  <body>
+    {% if username %}
+      <div class="text-right">
+        <img src="{{picture}}" class="username-image">{{username}}
+        <br><br>
+        <a class="button" href="{{url_for('gdisconnect')}}">Sign Out</a>
+      </div>
+    {% else %}
+      <div class="text-right">
+        <br>
+        <a class="button" href="{{url_for('showLogin')}}">Log In</a>
+      </div>
+    {% endif %}
+    <!-- FLASH -->
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul>
+        {% for message in messages %}
+          <p><strong> {{ message }} </strong></p>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    <!-- / FLASH -->
+    <h1>{{ restaurant.name }}</h1>
+    {% if restaurant.user_id == user_id %}
+      <center>
+        <a class = 'button' href='{{url_for('newMenuItem', restaurant_id = restaurant.id)}}'>Create New Item</a>
+      </center>
+      {% endif %}
+    <br><br><br>
+    {% for i in items %}
+      <center>
+        <div class="card">
+          <h2>{{i.name}}</h2>
+          <p>{{i.description}}</p>
+          <p>{{i.price}}</p>
+          {% if restaurant.user_id == user_id %}
+            <a class='button'href='{{url_for('deleteMenuItem', restaurant_id = restaurant.id, menu_id=i.id)}}'>Delete</a>
+            <a class='button' href='{{url_for('editMenuItem', restaurant_id = restaurant.id, menu_id=i.id)}}'>Edit</a>
+          {% endif %}
+        </div>
+      </center>
+    {% endfor %}
+    <br>
+    <center>
+      <a class = 'button' href='{{url_for('allRestaurants')}}'>Return to Restaurants</a>
+    </center>
+
+  </body>
+</html>

@@ -1,0 +1,53 @@
+<html>
+  <head>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="https://apis.google.com/js/client:platform.js?onload=start" async defer></script>
+    <link rel=stylesheet type=text/css href="{{url_for('static', filename='mystyle.css')}}">
+    <meta charset = "UTF-8">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karma:light|Lovers+Quarrel|Roboto:thin|Open+Sans+Condensed:300|Open+Sans:300|Lora">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script>
+      function start() {
+        gapi.load('auth2', function () {
+          auth2 = gapi.auth2.init({
+            client_id: '70585582318-6m692a73b94vl6dkf8b6i6de06aboh1e.apps.googleusercontent.com'
+          });
+        });
+      }
+    </script>
+  </head>
+  <body>
+    <h1>Log In with OAuth 2.0</h1>
+    <button id="signinButton" class="button">Google Signin</button>
+    <div id="result"></div>
+    <script>
+      $('#signinButton').click(function () {
+        function signInCallback(authResult) {
+          if (authResult['code']) {
+            $('#signinButton').attr('style', 'display:none');
+            $.ajax({
+              type: 'POST',
+              url: '/gconnect?state={{STATE}}',
+              processData: false,
+              data: authResult['code'],
+              contentType: 'application/octet-stream; charset=utf-8',
+              success: function (result) {
+                if (result) {
+                  $('#result').html('Login Successful!</br>' + result + '</br>Redirecting...');
+                  setTimeout(function () {
+                    window.location.href = "/";
+                  }, 4000);
+                } else if (authResult['error']) {
+                  console.log('There was an error: ' + authResult['error']);
+                } else {
+                  $('#result').html('Failed to make a server-side call. Check your configuration and console.');
+                }
+              }
+            });
+          }
+        }
+      auth2.grantOfflineAccess().then(signInCallback);
+    })
+  </script>
+  </body>
+</html>
